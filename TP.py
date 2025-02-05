@@ -136,6 +136,6 @@ results = calculate_grinding_parameters(R1, alfa1, N1, L1, R2, H1, L2, X0, Z0, B
 start_x, start_z,start_b, start_c, end_x, end_z, end_b, end_c, center_x, center_z, center_r = results
 
 print("磨削参数计算结果:")
-print(f"磨削起点坐标: ({start_x:.4f}, {start_z:.4f}), B轴角度: {start_b:.4f}, C轴角度: {start_c:.4f}")
-print(f"磨削终点坐标: ({end_x:.4f}, {end_z:.4f}), B轴角度: {end_b:.4f}, C轴角度: {end_c:.4f}")
-print(f"基准圆心坐标: ({center_x:.4f}, {center_z:.4f}), 半径: {center_r:.4f}")
+print(f"磨削起点坐标: (X:{start_x:.4f}, Z:{start_z:.4f}), B轴起点绝对角度: {start_b:.4f}, C轴起点绝对角度: {start_c:.4f}")
+print(f"磨削终点坐标: (X:{end_x:.4f}, Z:{end_z:.4f}), B轴终点绝对角度: {end_b:.4f}, C轴终点增量角度: {end_c:.4f}")
+print(f"基准圆心坐标: (X:{center_x:.4f}, Z:{center_z:.4f}), 半径: {center_r:.4f}")
