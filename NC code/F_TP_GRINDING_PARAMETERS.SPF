@@ -27,8 +27,7 @@ PROC F_TP_GRINDING_PARAMETERS(REAL pRad, REAL alpha, REAL tC, REAL bX, REAL wR, 
 ; bR    基准圆半径
 ;****************************
 
-DEF REAL cWX, vR, bA, sCL, aSO, dSX, dSZ, pSX, pSZ, sPCL, aPO, dPX, dPZ
-DEF REAL eCL, dEX, dEZ, gEX, gEZ, ePCL, dEPX, dEPZ, cA1, cB1, cC1, cA2, cB2, cC2, det
+DEF REAL cWX, vR, bA, sCL, aSO, dSX, dSZ, pSX, pSZ, sPCL, aPO, dPX, dPZ, eCL, dEX, dEZ, gEX, gEZ, ePCL, dEPX, dEPZ, cA1, cB1, cC1, cA2, cB2, cC2, det
 
 ;-------------------------
 ;【步骤1：计算复合砂轮X方向偏移、虚拟半径及β角】

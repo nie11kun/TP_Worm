@@ -1,3 +1,29 @@
+;*计算TP涡轮磨削相关参数
+;
+; pRad  涡轮分度圆半径
+; alpha 涡轮加工角度（α），单位：度
+; tC    涡轮齿数
+; bX    B轴中心到砂轮中心X方向距离
+; wR    砂轮半径
+; wHD   砂轮外沿到分度圆点的高度差
+; bZ    B轴中心到砂轮中心Z方向距离
+; gX    磨削中点对刀点X坐标
+; gZ    磨削中点对刀点Z坐标
+; gB    磨削中点对刀点B轴角度
+; gC    磨削中点对刀点C轴角度
+;
+; scX   磨削起点分度圆X坐标
+; scZ   磨削起点分度圆Z坐标
+; sB    磨削起点B轴角度
+; sCA   磨削起点C轴角度
+; eCX   磨削终点分度圆X坐标
+; eCZ   磨削终点分度圆Z坐标
+; eB    磨削终点B轴角度
+; eCD   磨削终点C轴相对增量角度
+; cX    基准圆圆心X坐标
+; cZ    基准圆圆心Z坐标
+; bR    基准圆半径
+
 DEF REAL pRad, alpha, tC, bX, wR, wHD, bZ, gX, gZ, gB, gC, scX, scZ, sB, sCA, eCX, eCZ, eB, eCD, cX, cZ, bR
 
 ;【输入参数】
