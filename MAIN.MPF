@@ -1,0 +1,28 @@
+DEF REAL pRad, alpha, tC, bX, wR, wHD, bZ, gX, gZ, gB, gC, scX, scZ, sB, sCA, eCX, eCZ, eB, eCD, cX, cZ, bR
+
+;【输入参数】
+pRad  = 110.05     ; 涡轮分度圆半径
+alpha = 50         ; 涡轮加工角度 (α)，单位：度
+tC  = 60           ; 涡轮齿数
+bX  = 606.23       ; B轴中心到砂轮中心X方向距离
+wR  = 286.43       ; 砂轮半径
+wHD = 3.303        ; 砂轮外沿到分度圆点的高度差
+bZ  = 73.9788      ; B轴中心到砂轮中心Z方向距离
+gX  = 0            ; 磨削中点X坐标
+gZ  = 0            ; 磨削中点Z坐标
+gB  = 0            ; 磨削中点B轴角度
+gC  = 0            ; 磨削中点C轴角度
+
+; 调用计算磨削参数的函数
+F_TP_GRINDING_PARAMETERS(pRad, alpha, tC, bX, wR, wHD, bZ, gX, gZ, gB, gC, scX, scZ, sB, sCA, eCX, eCZ, eB, eCD, cX, cZ, bR)
+
+; 输出结果信息
+MSG("磨削起点坐标：(X: " << scX << ",  Z: " << scZ << "), B轴起点绝对角度: " << sB << ", C轴起点绝对角度: " << sCA)
+M0
+MSG("磨削终点坐标：(X: " << eCX << ",  Z: " << eCZ << "), B轴终点绝对角度: " << eB << ", C轴终点相对增量角度: " << eCD)
+M0
+MSG("基准圆：圆心 (X: " << cX << ", Z: " << cZ << "), 半径 = " << bR)
+M0
+
+M30
+
