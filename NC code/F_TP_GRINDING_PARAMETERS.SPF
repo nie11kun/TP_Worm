@@ -1,4 +1,4 @@
-PROC F_TP_GRINDING_PARAMETERS(REAL pRad, REAL alpha, REAL tC, REAL bX, REAL wR, REAL wHD, REAL pA1, REAL aL1, REAL aL2, REAL gX, REAL gZ, REAL gB, REAL gC, VAR REAL scX, VAR REAL scZ, VAR REAL sB, VAR REAL sCA, VAR REAL eCX, VAR REAL eCZ, VAR REAL eB, VAR REAL eCD, VAR REAL cX, VAR REAL cZ, VAR REAL bR) DISPLOF
+PROC F_TP_GRINDING_PARAMETERS(REAL pRad, REAL alpha, REAL tC, REAL bX, REAL wR, REAL wHD, REAL pA1, REAL hN, REAL aL1, REAL aL2, REAL gX, REAL gZ, REAL gB, REAL gC, VAR REAL scX, VAR REAL scZ, VAR REAL sB, VAR REAL sCA, VAR REAL eCX, VAR REAL eCZ, VAR REAL eB, VAR REAL eCD, VAR REAL cX, VAR REAL cZ, VAR REAL bR) DISPLOF
 ;***********程序功能**********
 ;*计算TP涡轮磨削相关参数
 ;
@@ -9,6 +9,7 @@ PROC F_TP_GRINDING_PARAMETERS(REAL pRad, REAL alpha, REAL tC, REAL bX, REAL wR, 
 ; wR    砂轮半径
 ; wHD   砂轮外沿到分度圆点的高度差
 ; pA1   蜗杆螺旋角度
+; hN    蜗杆旋向 (1右旋 -1左旋)
 ; aL1   A轴中心距离砂轮中心的Z向距离（正值表示砂轮在A轴回转中心左侧
 ; aL2   B轴中心距离A轴中心（正值表示A轴中心在B轴回转中心左侧）
 ; gX    磨削中点对刀点X坐标
@@ -78,10 +79,13 @@ scZ = pSZ - dPZ
 ;【步骤4：计算起点B/C轴角度】
 sB = gB + alpha / 2        
     ; 起点B角 = gB + α/2
-sCA = gC + (alpha / 2) * tC  
+sCA = gC + hN * (alpha / 2) * tC  
     ; 起点C角 = gC + (α/2)*tC
 WHILE (sCA >= 360)
   sCA = sCA - 360
+ENDWHILE
+WHILE (sCA < 0)
+  sCA = sCA + 360
 ENDWHILE
 
 ;-------------------------
@@ -120,7 +124,7 @@ eCZ = gEZ + dEPZ
     ; 磨削终点分度圆Z = gEZ + dEPZ
 eB = gB - alpha / 2          
     ; 终点B角 = gB - α/2
-eCD = alpha * tC         
+eCD = -1 * hN * alpha * tC         
     ; 终点C相对增量 = α*tC
 
 ;-------------------------

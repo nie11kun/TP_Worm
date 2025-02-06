@@ -1,7 +1,7 @@
 import math
 import numpy as np
 
-def calculate_grinding_parameters(R1, alfa1, N1, L1, R2, H1, pA1, L21, L22, X0, Z0, B0, C0):
+def calculate_grinding_parameters(R1, alfa1, N1, L1, R2, H1, pA1, hN, L21, L22, X0, Z0, B0, C0):
     """
     计算涡轮磨削相关参数
     
@@ -13,6 +13,7 @@ def calculate_grinding_parameters(R1, alfa1, N1, L1, R2, H1, pA1, L21, L22, X0, 
     R2: float - 砂轮半径
     H1: float - 砂轮外沿距离分度圆点的高度
     pA1: float - 蜗杆螺旋角度
+    hN: int - 蜗杆旋向 (1右旋 -1左旋)
     L21: float - A轴中心距离砂轮中心的Z向距离（正值表示砂轮在A轴回转中心左侧）
     L22: float - B轴中心距离A轴中心（正值表示A轴中心在B轴回转中心左侧）
     X0: float - 磨削中点分度圆点2砂轮对刀点X坐标
@@ -79,7 +80,7 @@ def calculate_grinding_parameters(R1, alfa1, N1, L1, R2, H1, pA1, L21, L22, X0, 
     
     # 步骤 4: 计算 B 轴和 C 轴角度
     alfa2 = B0 + alfa1 / 2
-    beta2 = (C0 + (alfa1 / 2) / (360 / N1) * 360) % 360
+    beta2 = (C0 + hN * (alfa1 / 2) / (360 / N1) * 360) % 360
     print(f"alfa2 (磨削起点B轴角度): {alfa2}, beta2 (磨削起点C轴角度): {beta2}")
     
     # 步骤 5: 计算 L6, X5, Z5, X6, Z6
@@ -108,7 +109,7 @@ def calculate_grinding_parameters(R1, alfa1, N1, L1, R2, H1, pA1, L21, L22, X0, 
     print(f"X8 (磨削终点分度圆点2坐标.X): {X8}, Z8 (磨削终点分度圆点2坐标.Z): {Z8}")
     
     alfa3 = B0 - alfa1 / 2
-    beta3 = alfa1 / (360 / N1) * 360
+    beta3 = -1 * hN * alfa1 / (360 / N1) * 360
     print(f"alfa3 (磨削终点B轴角度): {alfa3}, beta3 (磨削终点C轴相对起点增量角度): {beta3}")
     
     center, radius = find_circle_from_points((X4, Z4), (X8, Z8), (X0, Z0))
@@ -127,6 +128,7 @@ L1 = 606.23              # B轴中心距离砂轮中心的X向距离 (float)
 R2 = 572.86 / 2          # 砂轮半径 (float)
 H1 = 113.353 - 110.05    # 砂轮外沿距离分度圆点的高度 (float)
 pA1 = 7.0                # 蜗杆螺旋角度 (float)
+hN = 1                   # 蜗杆旋向 (1右旋 -1左旋) (int)
 L21 = 75.1238            # A轴中心距离砂轮中心的Z向距离（正值表示砂轮在A轴回转中心左侧） (float)
 L22 = -1.145             # B轴中心距离A轴中心（正值表示A轴中心在B轴回转中心左侧） (float)
 X0 = 0                   # 磨削中点分度圆点2砂轮对刀点X坐标 (float)
@@ -134,7 +136,7 @@ Z0 = 0                   # 磨削中点分度圆点2砂轮对刀点Z坐标 (floa
 B0 = 0                   # 磨削中点分度圆点2砂轮对刀点B轴角度 (float)
 C0 = 0                   # 磨削中点分度圆点2砂轮对刀点C轴角度 (float)
 
-results = calculate_grinding_parameters(R1, alfa1, N1, L1, R2, H1, pA1, L21, L22, X0, Z0, B0, C0)
+results = calculate_grinding_parameters(R1, alfa1, N1, L1, R2, H1, pA1, hN, L21, L22, X0, Z0, B0, C0)
 
 start_x, start_z,start_b, start_c, end_x, end_z, end_b, end_c, center_x, center_z, center_r = results
 

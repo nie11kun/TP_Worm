@@ -7,6 +7,7 @@
 ; wR    砂轮半径
 ; wHD   砂轮外沿到分度圆点的高度差
 ; pA1   蜗杆螺旋角度
+; hN    蜗杆旋向 (1右旋 -1左旋)
 ; aL1   A轴中心距离砂轮中心的Z向距离（正值表示砂轮在A轴回转中心左侧
 ; aL2   B轴中心距离A轴中心（正值表示A轴中心在B轴回转中心左侧）
 ; gX    磨削中点对刀点X坐标
@@ -26,7 +27,7 @@
 ; cZ    基准圆圆心Z坐标
 ; bR    基准圆半径
 
-DEF REAL pRad, alpha, tC, bX, wR, wHD, pA1, aL1, aL2, gX, gZ, gB, gC, scX, scZ, sB, sCA, eCX, eCZ, eB, eCD, cX, cZ, bR
+DEF REAL pRad, alpha, tC, bX, wR, wHD, pA1, hN, aL1, aL2, gX, gZ, gB, gC, scX, scZ, sB, sCA, eCX, eCZ, eB, eCD, cX, cZ, bR
 
 ;【输入参数】
 pRad  = 110.05              ; 涡轮分度圆半径
@@ -36,6 +37,7 @@ bX  = 606.23                ; B轴中心到砂轮中心X方向距离
 wR  = 572.86 / 2            ; 砂轮半径
 wHD = 113.353 - 110.05      ; 砂轮外沿到分度圆点的高度差
 pA1 = 7.0                   ; 蜗杆螺旋角度
+hN  = 1                     ; 蜗杆旋向 (1右旋 -1左旋)
 aL1 = 75.1238               ; A轴中心距离砂轮中心的Z向距离 (正值表示砂轮在A轴回转中心左侧)
 aL2 = -1.145                ; B轴中心距离A轴中心 (正值表示A轴中心在B轴回转中心左侧)
 gX  = 0                     ; 磨削中点X坐标
@@ -44,7 +46,7 @@ gB  = 0                     ; 磨削中点B轴角度
 gC  = 0                     ; 磨削中点C轴角度
 
 ; 调用计算磨削参数的函数
-F_TP_GRINDING_PARAMETERS(pRad, alpha, tC, bX, wR, wHD, pA1, aL1, aL2, gX, gZ, gB, gC, scX, scZ, sB, sCA, eCX, eCZ, eB, eCD, cX, cZ, bR)
+F_TP_GRINDING_PARAMETERS(pRad, alpha, tC, bX, wR, wHD, pA1, hN, aL1, aL2, gX, gZ, gB, gC, scX, scZ, sB, sCA, eCX, eCZ, eB, eCD, cX, cZ, bR)
 
 ; 输出结果信息
 MSG("磨削起点坐标：(X: " << scX << ",  Z: " << scZ << "), B轴起点绝对角度: " << sB << ", C轴起点绝对角度: " << sCA)
