@@ -136,7 +136,7 @@ Z0 = 0                   # 磨削中点分度圆点2砂轮对刀点Z坐标 (floa
 B0 = 0                   # 磨削中点分度圆点2砂轮对刀点B轴角度 (float)
 C0 = 0                   # 磨削中点分度圆点2砂轮对刀点C轴角度 (float)
 
-tG = 5.0                 # 总磨削深度 (float)
+tG = 3.0                 # 总磨削深度 (float)
 fR = 0.02                # 磨削深度步长 (float)
 
 # 计算步数（包含首尾）
@@ -144,6 +144,8 @@ num_steps = int(tG / fR)  # 如 5.0/0.02 = 250
 # 生成 currentValue 序列，从 5.00 递减到 0.00（保留两位小数）
 step_values = [round(tG - i * fR, 2) for i in range(num_steps + 1)]
 # 例如： [5.0, 4.98, 4.96, ..., 0.0]
+
+hN_str = "右旋" if hN == 1 else "左旋"
 
 # 打开输出文件
 with open("output.txt", "w", encoding="utf-8") as f:
@@ -154,7 +156,7 @@ with open("output.txt", "w", encoding="utf-8") as f:
     line += f";涡轮加工角度: {alfa1:.4f}度;\n"
     line += f";涡轮齿数: {N1}齿;\n"
     line += f";蜗杆螺旋角度: {pA1:.4f}度;\n"
-    line += f";蜗杆旋向: {hN} (1右旋 -1左旋);\n"
+    line += f";蜗杆旋向: {hN_str};\n"
     line += f";砂轮直径: {R2*2:.4f}mm;\n"
     line += f";磨削余量: {tG}mm;\n"
     line += ";****************\n"
