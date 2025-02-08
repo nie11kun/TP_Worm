@@ -184,15 +184,15 @@ with open("output.txt", "w", encoding="utf-8") as f:
         label = "CV_" + f"{val:.2f}".replace(".", "_")
 
         # 更新当前 R1 值
-        current_R1 = R1 + val
-        current_R0 = X0 + val
+        current_R1 = R1 - val
+        current_X0 = X0 + val
 
         # 调用计算函数，获得各项磨削参数
         (start_x, start_z, start_b, start_c,
          end_x, end_z, end_b, end_c,
          center_x, center_z, center_r) = calculate_grinding_parameters(
              current_R1, alfa1, N1, L1, R2, H1,
-             pA1, hN, L21, L22, current_R0, Z0, B0, C0
+             pA1, hN, L21, L22, current_X0, Z0, B0, C0
          )
         
         # 写入标签及参数块
