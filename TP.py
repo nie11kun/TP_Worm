@@ -210,7 +210,7 @@ with open("output.txt", "w", encoding="utf-8") as f:
         f.write(f"R241={end_x:10.4f}        ;X坐标\n")
         f.write(f"R242={end_z:10.4f}        ;Z坐标\n")
         f.write(f"R243={end_b:10.4f}        ;B绝对角度\n")
-        f.write(f"R244={end_c:10.4f}        ;C轴终端增量角度\n\n")
+        f.write(f"R244={end_c:10.4f}        ;C轴终端增量角度\n")
         f.write("RET\n\n")
 
 print("输出已完成，请查看 output.txt 文件。")
