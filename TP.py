@@ -125,7 +125,7 @@ R1 = 110.05              # 涡轮分度圆半径 (float)
 alfa1 = 22.3 * 2         # 涡轮加工角度（度） (float)
 N1 = 60                  # 涡轮齿数 (int)
 L1 = 606.23              # B轴中心距离砂轮中心的X向距离 (float)
-R2 = 572.50 / 2          # 砂轮半径 (float)
+R2 = 572.20 / 2          # 砂轮半径 (float)
 H1 = 3.72                # 砂轮外沿距离分度圆点的高度 (float)
 pA1 = 7.0                # 蜗杆螺旋角度 (float)
 hN = 1                   # 蜗杆旋向 (1右旋 -1左旋) (int)
@@ -150,7 +150,9 @@ with open("output.txt", "w", encoding="utf-8") as f:
     
     # ----------- 写入 IF 条件语句部分 -----------
 
-    line = "DEF REAL currentValue;\n"
+    line = f";砂轮直径: {R2*2:.4f}mm;\n"
+    line += ";****************\n"
+    line += "DEF REAL currentValue;\n"
     line += "STOPRE;\n"
     line += "currentValue = R210;\n\n"
     f.write(line)
