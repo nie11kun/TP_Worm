@@ -150,7 +150,13 @@ with open("output.txt", "w", encoding="utf-8") as f:
     
     # ----------- 写入 IF 条件语句部分 -----------
 
-    line = f";砂轮直径: {R2*2:.4f}mm;\n"
+    line = f";涡轮分度圆半径: {R1:.4f}mm;\n"
+    line += f";涡轮加工角度: {alfa1:.4f}度;\n"
+    line += f";涡轮齿数: {N1}齿;\n"
+    line += f";蜗杆螺旋角度: {pA1:.4f}度;\n"
+    line += f";蜗杆旋向: {hN} (1右旋 -1左旋);\n"
+    line += f";砂轮直径: {R2*2:.4f}mm;\n"
+    line += f";磨削余量: {tG}mm;\n"
     line += ";****************\n"
     line += "DEF REAL currentValue;\n"
     line += "STOPRE;\n"
