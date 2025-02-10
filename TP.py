@@ -125,7 +125,7 @@ R1 = 110.05              # 涡轮分度圆半径 (float)
 alfa1 = 22.3 * 2         # 涡轮加工角度（度） (float)
 N1 = 60                  # 涡轮齿数 (int)
 L1 = 606.23              # B轴中心距离砂轮中心的X向距离 (float)
-R2 = 572.20 / 2          # 砂轮半径 (float)
+R2 = 571.80 / 2          # 砂轮半径 (float)
 H1 = 3.72                # 砂轮外沿距离分度圆点的高度 (float)
 pA1 = 7.0                # 蜗杆螺旋角度 (float)
 hN = 1                   # 蜗杆旋向 (1右旋 -1左旋) (int)
@@ -136,7 +136,7 @@ Z0 = 0                   # 磨削中点分度圆点2砂轮对刀点Z坐标 (floa
 B0 = 0                   # 磨削中点分度圆点2砂轮对刀点B轴角度 (float)
 C0 = 0                   # 磨削中点分度圆点2砂轮对刀点C轴角度 (float)
 
-tG = 3.0                 # 总磨削深度 (float)
+tG = 4.0                 # 总磨削深度 (float)
 fR = 0.02                # 磨削深度步长 (float)
 
 # 计算步数（包含首尾）
@@ -185,7 +185,7 @@ with open("output.txt", "w", encoding="utf-8") as f:
 
         # 更新当前 R1 值
         current_R1 = R1 - val
-        current_X0 = X0 + val
+        current_X0 = X0
 
         # 调用计算函数，获得各项磨削参数
         (start_x, start_z, start_b, start_c,
