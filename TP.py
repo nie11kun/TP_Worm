@@ -1,6 +1,7 @@
 import os, shutil, platform, subprocess
 import math
 import numpy as np
+from datetime import datetime
 
 def find_circle_from_points(p1, p2, p3):
     """
@@ -173,17 +174,24 @@ def write_output_file(filename, step_values, param_dict):
     (R1, alfa1, N1, L1, R2, H1,
      pA1, hN, L21, L22,
      X0, Z0, B0, C0,
-     tG, fR) = (
+     tG, fR, Ypos) = (
        param_dict["R1"],   param_dict["alfa1"], param_dict["N1"],
        param_dict["L1"],   param_dict["R2"],    param_dict["H1"],
        param_dict["pA1"],  param_dict["hN"],
        param_dict["L21"],  param_dict["L22"],
        param_dict["X0"],   param_dict["Z0"],
        param_dict["B0"],   param_dict["C0"],
-       param_dict["tG"],   param_dict["fR"]
+       param_dict["tG"],   param_dict["fR"],
+       param_dict["Ypos"]
     )
 
     hN_str = "右旋" if hN == 1 else "左旋"
+
+    # 获取当前日期时间
+    current_datetime = datetime.now()
+
+    # 格式化为字符串
+    current_datetime_str = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
 
     with open(filename, "w", encoding="utf-8") as f:
         # 前置信息和 IF 条件
@@ -195,7 +203,11 @@ def write_output_file(filename, step_values, param_dict):
             f";蜗杆旋向: {hN_str};\n"
             f";砂轮直径: {R2*2:.4f}mm;\n"
             f";磨削余量: {tG}mm;\n"
-            ";****************\n"
+            f";Y轴加工位置: {Ypos:.4f};\n"
+            f";****************\n"
+            f";软件版本:1.0.0\n"
+            f";生成日期:{current_datetime_str}\n"
+            f";****************\n"
             "DEF REAL currentValue;\n"
             "STOPRE;\n"
             "currentValue = R210;\n\n"
@@ -279,6 +291,7 @@ def main():
     hN  = 1                 # 蜗杆旋向 (1右旋 -1左旋)
     L21 = 75.1328           # A轴中心距离砂轮中心的Z向距离
     L22 = -1.145            # B轴中心距离A轴中心
+    a0Y  = -0.0124          # A轴0度时Y轴和工件中心基准坐标
     X0  = 0                 # 磨削中点分度圆点2砂轮对刀点X坐标
     Z0  = 0                 # 磨削中点分度圆点2砂轮对刀点Z坐标
     B0  = 0                 # 磨削中点B轴角度
@@ -303,6 +316,9 @@ def main():
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
+    # Y 轴加工时的坐标
+    Ypos = a0Y - math.sin(math.radians(pA1)) * L21 * hN
+
     # 准备参数字典（先放部分通用）
     param_dict = {
         "R1": R1, "alfa1": alfa1, "N1": N1,
@@ -311,7 +327,8 @@ def main():
         "L21": L21,           "L22": L22,
         "X0": X0,             "Z0": Z0,
         "B0": B0,             "C0": C0,
-        "tG": tG,             "fR": fR
+        "tG": tG,             "fR": fR,
+        "Ypos": Ypos
     }
 
     # 在指定直径范围内循环
