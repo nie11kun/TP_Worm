@@ -1,3 +1,4 @@
+import os, shutil, platform, subprocess
 import math
 import numpy as np
 
@@ -6,11 +7,10 @@ def find_circle_from_points(p1, p2, p3):
     已知平面上三个点坐标，求过此三点的圆心和半径。
     
     参数：
-    p1, p2, p3: (float, float) - 平面上三点 (x, y)
-    
+        p1, p2, p3: (float, float) - 平面上三点 (x, y)
     返回：
-    center: (float, float) - 圆心 (x, y)
-    radius: float          - 圆半径
+        center: (float, float) - 圆心 (x, y)
+        radius: float          - 圆半径
     """
     x1, y1 = p1
     x2, y2 = p2
@@ -26,7 +26,7 @@ def find_circle_from_points(p1, p2, p3):
         x3**2 + y3**2 - x2**2 - y2**2
     ])
     
-    center = np.linalg.solve(A, B)     # 求圆心 (a, b)
+    center = np.linalg.solve(A, B)  # 求圆心 (a, b)
     a, b = center
     radius = math.sqrt((x1 - a) ** 2 + (y1 - b) ** 2)  # 求半径
 
@@ -40,25 +40,25 @@ def calculate_grinding_parameters(
     计算涡轮磨削相关参数，并返回磨削起点、磨削终点、基准圆心等坐标和角度。
     
     参数：
-    R1:  涡轮分度圆半径
-    alfa1: 涡轮加工角度（度）
-    N1:  涡轮齿数
-    L1:  B轴中心距离砂轮中心的 X 向距离
-    R2:  砂轮半径
-    H1:  砂轮外沿距离分度圆点的高度
-    pA1: 蜗杆螺旋角度
-    hN:  蜗杆旋向 (1 表示右旋，-1 表示左旋)
-    L21: A 轴中心距离砂轮中心的 Z 向距离（正值表示砂轮在 A 轴回转中心左侧）
-    L22: B 轴中心距离 A 轴中心（正值表示 A 轴中心在 B 轴回转中心左侧）
-    X0:  磨削中点分度圆点 2 砂轮对刀点 X 坐标
-    Z0:  磨削中点分度圆点 2 砂轮对刀点 Z 坐标
-    B0:  磨削中点分度圆点 2 砂轮对刀点 B 轴角度
-    C0:  磨削中点分度圆点 2 砂轮对刀点 C 轴角度
+        R1:  涡轮分度圆半径
+        alfa1: 涡轮加工角度（度）
+        N1:  涡轮齿数
+        L1:  B轴中心距离砂轮中心的 X 向距离
+        R2:  砂轮半径
+        H1:  砂轮外沿距离分度圆点的高度
+        pA1: 蜗杆螺旋角度
+        hN:  蜗杆旋向 (1 表示右旋，-1 表示左旋)
+        L21: A 轴中心距离砂轮中心的 Z 向距离
+        L22: B 轴中心距离 A 轴中心
+        X0:  磨削中点分度圆点 2 砂轮对刀点 X 坐标
+        Z0:  磨削中点分度圆点 2 砂轮对刀点 Z 坐标
+        B0:  磨削中点分度圆点 2 砂轮对刀点 B 轴角度
+        C0:  磨削中点分度圆点 2 砂轮对刀点 C 轴角度
 
     返回：
-    (start_x, start_z, start_b, start_c,
-     end_x, end_z,   end_b,   end_c,
-     center_x, center_z, center_r)
+        (start_x, start_z, start_b, start_c,
+         end_x, end_z,   end_b,   end_c,
+         center_x, center_z, center_r)
     """
     # 计算 B 轴中心与砂轮中心在 Z 向上的合成距离 L2（正值表示砂轮在B轴回转中心左侧）
     L2 = L21 * math.cos(math.radians(pA1)) + L22
@@ -144,11 +144,10 @@ def generate_step_values(total_depth, step_size):
     每一步相差 step_size，返回值保留两位小数。
     
     参数：
-    total_depth: float - 磨削总深度（若非 step_size 的整倍数，将被适当放大）
-    step_size:   float - 磨削步长
-    
+        total_depth: float - 磨削总深度（若非 step_size 的整倍数，将被适当放大）
+        step_size:   float - 磨削步长
     返回：
-    values: list[float]
+        values: list[float]
     """
     # 先根据 step_size 将 total_depth 向上取整到整倍数
     # 例如 total_depth=4.95, step_size=0.02，则放大到4.96
@@ -166,9 +165,9 @@ def write_output_file(filename, step_values, param_dict):
     将生成的磨削指令写入文件。
     
     参数：
-    filename: str              - 输出文件名
-    step_values: List[float]   - 磨削深度序列
-    param_dict: dict           - 存放各种参数的字典
+        filename: str            - 输出文件名
+        step_values: List[float] - 磨削深度序列
+        param_dict: dict         - 存放各种参数的字典
     """
     # 从字典中读取参数
     (R1, alfa1, N1, L1, R2, H1,
@@ -222,7 +221,7 @@ def write_output_file(filename, step_values, param_dict):
 
             # 计算当前 R1
             current_R1 = R1 - val
-            current_X0 = X0  # 本示例中 X0 不随 step 动态变化，也可以按需修改
+            current_X0 = X0
 
             (start_x, start_z, start_b, start_c,
              end_x, end_z,   end_b,   end_c,
@@ -255,42 +254,90 @@ def write_output_file(filename, step_values, param_dict):
 
     print(f"输出已完成，请查看 {filename} 文件。")
 
+def open_directory(path):
+    if platform.system() == "Windows":
+        os.startfile(path)
+    elif platform.system() == "Darwin":
+        subprocess.Popen(["open", path])
+    else:
+        subprocess.Popen(["xdg-open", path])
+
 def main():
-    # ====== 参数定义 ======
-    R1 = 110.05         # 涡轮分度圆半径
-    alfa1 = 22.3 * 2    # 涡轮加工角度（度）
-    N1 = 60             # 涡轮齿数
-    L1 = 606.23         # B轴中心距离砂轮中心的X向距离
-    R2 = 571.80 / 2     # 砂轮半径
-    H1 = 3.72           # 砂轮外沿距离分度圆点的高度
-    pA1 = 7.0           # 蜗杆螺旋角度
-    hN = 1              # 蜗杆旋向 (1右旋 -1左旋)
-    L21 = 75.1328       # A轴中心距离砂轮中心的Z向距离
-    L22 = -1.145        # B轴中心距离A轴中心
-    X0 = 0              # 磨削中点分度圆点2砂轮对刀点X坐标
-    Z0 = 0              # 磨削中点分度圆点2砂轮对刀点Z坐标
-    B0 = 0              # 磨削中点B轴角度
-    C0 = 0              # 磨削中点C轴角度
+    """
+    主函数：
+      1. 用户输入砂轮直径范围和步距
+      2. 针对每个直径，计算并输出对应的文本文件
+      3. 所有文件统一放在文件夹下
+    """
+    # ====== 通用参数定义（可根据实际情况修改） ======
+    R1  = 110.05            # 涡轮分度圆半径
+    alfa1 = 22.3 * 2        # 涡轮加工角度（度）
+    N1  = 60                # 涡轮齿数
+    L1  = 606.23            # B轴中心距离砂轮中心的 X 向距离
+    H1  = 3.72              # 砂轮外沿距离分度圆点的高度
+    pA1 = 7.0               # 蜗杆螺旋角度
+    hN  = 1                 # 蜗杆旋向 (1右旋 -1左旋)
+    L21 = 75.1328           # A轴中心距离砂轮中心的Z向距离
+    L22 = -1.145            # B轴中心距离A轴中心
+    X0  = 0                 # 磨削中点分度圆点2砂轮对刀点X坐标
+    Z0  = 0                 # 磨削中点分度圆点2砂轮对刀点Z坐标
+    B0  = 0                 # 磨削中点B轴角度
+    C0  = 0                 # 磨削中点C轴角度
 
-    tG = 4.0            # 磨削总深度
-    fR = 0.02           # 磨削步进
+    tG  = 4.0               # 磨削总深度
+    fR  = 0.02              # 磨削步进（轴向余量步进）
 
+    # 砂轮直径范围及步距：
+    min_diameter, max_diameter, step_diameter = 571.0, 572.0, 0.1
+
+    R1_str = f"{R1:.4f}".replace('.', '_')
+
+    # 确保输出文件夹存在
+    output_folder = f"C:/Users/Marco Nie/Downloads/PC_{R1_str}"
+
+    # 删除文件夹
+    if os.path.exists(output_folder) and os.path.isdir(output_folder):
+        shutil.rmtree(output_folder)
+
+    # 新建文件夹
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
+    # 准备参数字典（先放部分通用）
     param_dict = {
         "R1": R1, "alfa1": alfa1, "N1": N1,
-        "L1": L1, "R2": R2, "H1": H1,
-        "pA1": pA1, "hN": hN,
-        "L21": L21, "L22": L22,
-        "X0": X0, "Z0": Z0,
-        "B0": B0, "C0": C0,
-        "tG": tG, "fR": fR
+        "L1": L1,             "H1": H1,
+        "pA1": pA1,           "hN": hN,
+        "L21": L21,           "L22": L22,
+        "X0": X0,             "Z0": Z0,
+        "B0": B0,             "C0": C0,
+        "tG": tG,             "fR": fR
     }
 
-    # 生成步进序列
-    step_values = generate_step_values(tG, fR)
+    # 在指定直径范围内循环
+    current_d = min_diameter
+    while current_d <= max_diameter + 1e-9:
+        # 当前砂轮半径
+        R2 = current_d / 2.0
+        param_dict["R2"] = R2
 
-    # 写入输出文件
-    output_filename = "output.txt"
-    write_output_file(output_filename, step_values, param_dict)
+        # 生成该直径下的步进序列
+        step_values = generate_step_values(tG, fR)
+
+        # 输出文件名，可根据需求自定义
+        current_d_str = f"{current_d:.4f}".replace('.', '_')
+        output_filename = os.path.join(
+            output_folder, f"DATA_{current_d_str}.SPF"
+        )
+
+        # 写入输出文件
+        write_output_file(output_filename, step_values, param_dict)
+
+        # 下一个直径
+        current_d += step_diameter
+
+    print("所有砂轮直径对应的文本文件均已生成。")
+    open_directory(output_folder)
 
 if __name__ == "__main__":
     main()
