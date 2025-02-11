@@ -301,7 +301,7 @@ def main():
     fR  = 0.02              # 磨削步进（轴向余量步进）
 
     # 砂轮直径范围及步距：
-    min_diameter, max_diameter, step_diameter = 571.0, 572.0, 0.1
+    min_diameter, max_diameter, step_diameter = 592.0, 595.0, 0.1
 
     R1_str = f"{R1:.4f}".replace('.', '_')
 
@@ -344,7 +344,7 @@ def main():
         # 输出文件名，可根据需求自定义
         current_d_str = f"{current_d:.4f}".replace('.', '_')
         output_filename = os.path.join(
-            output_folder, f"DATA_{current_d_str}.SPF"
+            output_folder, f"DIA_{current_d_str}.SPF"
         )
 
         # 写入输出文件
