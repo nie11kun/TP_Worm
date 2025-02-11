@@ -32,7 +32,7 @@
 ; cyT   总磨削次数
 ; cyR   当前磨削次数
 
-DEF REAL pRad, alpha, tC, bX, wR, wHD, pA1, hN, aL1, aL2, gX, gZ, gB, gC, scX, scZ, sB, sCA, eCX, eCZ, eB, eCD, cX, cZ, bR
+DEF REAL pRad, alpha, tC, bX, wR, wHD, pA1, hN, aL1, aL2, aY, gX, gZ, gB, gC, Ypos, scX, scZ, sB, sCA, eCX, eCZ, eB, eCD, cX, cZ, bR
 DEF REAL lP, fR, cyT, cyR
 
 ;【输入参数】
@@ -46,6 +46,7 @@ pA1 = 7.0                   ; 蜗杆螺旋角度
 hN  = 1                     ; 蜗杆旋向 (1右旋 -1左旋)
 aL1 = 75.1328               ; A轴中心距离砂轮中心的Z向距离 (正值表示砂轮在A轴回转中心左侧)
 aL2 = -1.145                ; B轴中心距离A轴中心 (正值表示A轴中心在B轴回转中心左侧)
+aY  = -0.0124               ; A轴0度时Y轴和工件中心基准坐标
 gX  = 0                     ; 磨削中点X坐标
 gZ  = 0                     ; 磨削中点Z坐标
 gB  = 0                     ; 磨削中点B轴角度
@@ -53,7 +54,11 @@ gC  = 0                     ; 磨削中点C轴角度
 
 fR  = 1                     ; 每次进给量
 cyT = 10                    ; 总磨削次数
+
 cyR = 0                     ; 当前磨削次数
+
+; Y 轴加工时的坐标
+Ypos = aY - sin(pA1) * aL1 * hN
 
 WHILE(cyR < cyT)
     STOPRE
@@ -63,6 +68,8 @@ WHILE(cyR < cyT)
     F_TP_GRINDING_PARAMETERS(pRad-(cyT*fR-cyR*fR), alpha, tC, bX, wR, wHD, pA1, hN, aL1, aL2, gX, gZ, gB, gC, scX, scZ, sB, sCA, eCX, eCZ, eB, eCD, cX, cZ, bR)
 
     ; 输出结果信息
+    MSG("磨削起点坐标.Y：" << Ypos)
+    M0
     MSG("磨削起点坐标：(X: " << scX << ",  Z: " << scZ << "), B轴起点绝对角度: " << sB << ", C轴起点绝对角度: " << sCA)
     M0
     MSG("磨削终点坐标：(X: " << eCX << ",  Z: " << eCZ << "), B轴终点绝对角度: " << eB << ", C轴终点相对增量角度: " << eCD)
@@ -71,6 +78,8 @@ WHILE(cyR < cyT)
     M0
 
     TRANS X=gX-cyR*fR Z=gZ B=gB C=gC
+
+    G90 G01 Y=Ypos F10000
 
     G90 G01 X=scX Z=scZ B=sB C=sCA F10000
 
