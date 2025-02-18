@@ -10,11 +10,14 @@
 ; hN    蜗杆旋向 (1右旋 -1左旋)
 ; aL1   A轴中心距离砂轮中心的Z向距离（正值表示砂轮在A轴回转中心左侧
 ; aL2   B轴中心距离A轴中心（正值表示A轴中心在B轴回转中心左侧）
+; aY    A轴0度时Y轴和工件中心基准坐标
 ; gX    磨削中点对刀点X坐标
 ; gZ    磨削中点对刀点Z坐标
 ; gB    磨削中点对刀点B轴角度
 ; gC    磨削中点对刀点C轴角度
+; lP    剩余总磨削量
 ;
+; Ypos  Y轴加工时的坐标
 ; scX   磨削起点分度圆X坐标
 ; scZ   磨削起点分度圆Z坐标
 ; sB    磨削起点B轴角度
@@ -27,21 +30,20 @@
 ; cZ    基准圆圆心Z坐标
 ; bR    基准圆半径
 
-; lP    总磨削量
 ; fR    每次进给量
 ; cyT   总磨削次数
 ; cyR   当前磨削次数
 
-DEF REAL pRad, alpha, tC, bX, wR, wHD, pA1, hN, aL1, aL2, aY, gX, gZ, gB, gC, Ypos, scX, scZ, sB, sCA, eCX, eCZ, eB, eCD, cX, cZ, bR
-DEF REAL lP, fR, cyT, cyR
+DEF REAL pRad, alpha, tC, bX, wR, wHD, pA1, hN, aL1, aL2, aY, gX, gZ, gB, gC, lP, Ypos, scX, scZ, sB, sCA, eCX, eCZ, eB, eCD, cX, cZ, bR
+DEF REAL fR, cyT, cyR
 
 ;【输入参数】
 pRad  = 110.05              ; 涡轮分度圆半径
-alpha = 22.3 * 2            ; 涡轮加工角度 (α)，单位：度
+alpha = 21 * 2              ; 涡轮加工角度 (α)，单位：度
 tC  = 60                    ; 涡轮齿数
 bX  = 606.23                ; B轴中心到砂轮中心X方向距离
-wR  = 572.50 / 2            ; 砂轮半径
-wHD = 3.72                  ; 砂轮外沿到分度圆点的高度差
+wR  = 556.40 / 2            ; 砂轮半径
+wHD = 3.40                  ; 砂轮外沿到分度圆点的高度差
 pA1 = 7.0                   ; 蜗杆螺旋角度
 hN  = 1                     ; 蜗杆旋向 (1右旋 -1左旋)
 aL1 = 75.1328               ; A轴中心距离砂轮中心的Z向距离 (正值表示砂轮在A轴回转中心左侧)
@@ -50,31 +52,28 @@ aY  = -0.0124               ; A轴0度时Y轴和工件中心基准坐标
 gX  = 0                     ; 磨削中点X坐标
 gZ  = 0                     ; 磨削中点Z坐标
 gB  = 0                     ; 磨削中点B轴角度
-gC  = 0                     ; 磨削中点C轴角度
+gC  = 168.01                ; 磨削中点C轴角度
 
-fR  = 1                     ; 每次进给量
-cyT = 10                    ; 总磨削次数
-
+fR  = 0.1                   ; 每次进给量
+cyT = 5                     ; 总磨削次数
 cyR = 0                     ; 当前磨削次数
-
-; Y 轴加工时的坐标
-Ypos = aY - sin(pA1) * aL1 * hN
 
 WHILE(cyR < cyT)
     STOPRE
     cyR = cyR + 1
+    lP  = cyT*fR-cyR*fR      ; 剩余总磨削量
 
     ; 调用计算磨削参数的函数
-    F_TP_GRINDING_PARAMETERS(pRad-(cyT*fR-cyR*fR), alpha, tC, bX, wR, wHD, pA1, hN, aL1, aL2, gX, gZ, gB, gC, scX, scZ, sB, sCA, eCX, eCZ, eB, eCD, cX, cZ, bR)
+    F_TP_GRINDING_PARAMETERS(pRad, alpha, tC, bX, wR, wHD, pA1, hN, aL1, aL2, aY, gX, gZ, gB, gC, lP, Ypos, scX, scZ, sB, sCA, eCX, eCZ, eB, eCD, cX, cZ, bR)
 
     ; 输出结果信息
     MSG("磨削起点坐标.Y：" << Ypos)
     M0
+    MSG("基准圆：圆心 (X: " << cX << ", Z: " << cZ << "), 半径 = " << bR)
+    M0
     MSG("磨削起点坐标：(X: " << scX << ",  Z: " << scZ << "), B轴起点绝对角度: " << sB << ", C轴起点绝对角度: " << sCA)
     M0
     MSG("磨削终点坐标：(X: " << eCX << ",  Z: " << eCZ << "), B轴终点绝对角度: " << eB << ", C轴终点相对增量角度: " << eCD)
-    M0
-    MSG("基准圆：圆心 (X: " << cX << ", Z: " << cZ << "), 半径 = " << bR)
     M0
 
     TRANS X=gX-cyR*fR Z=gZ B=gB C=gC

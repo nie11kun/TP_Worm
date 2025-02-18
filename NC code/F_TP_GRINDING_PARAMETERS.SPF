@@ -1,7 +1,8 @@
-PROC F_TP_GRINDING_PARAMETERS(REAL pRad, REAL alpha, REAL tC, REAL bX, REAL wR, REAL wHD, REAL pA1, REAL hN, REAL aL1, REAL aL2, REAL gX, REAL gZ, REAL gB, REAL gC, VAR REAL scX, VAR REAL scZ, VAR REAL sB, VAR REAL sCA, VAR REAL eCX, VAR REAL eCZ, VAR REAL eB, VAR REAL eCD, VAR REAL cX, VAR REAL cZ, VAR REAL bR) DISPLOF
+PROC F_TP_GRINDING_PARAMETERS(REAL pRad, REAL alpha, REAL tC, REAL bX, REAL wR, REAL wHD, REAL pA1, REAL hN, REAL aL1, REAL aL2, REAL aY, REAL gX, REAL gZ, REAL gB, REAL gC, REAL lP, VAR REAL Ypos, VAR REAL scX, VAR REAL scZ, VAR REAL sB, VAR REAL sCA, VAR REAL eCX, VAR REAL eCZ, VAR REAL eB, VAR REAL eCD, VAR REAL cX, VAR REAL cZ, VAR REAL bR) DISPLOF
 ;***********程序功能**********
 ;*计算TP涡轮磨削相关参数
 ;
+; 输入参数
 ; pRad  涡轮分度圆半径
 ; alpha 涡轮加工角度（α），单位：度
 ; tC    涡轮齿数
@@ -12,11 +13,15 @@ PROC F_TP_GRINDING_PARAMETERS(REAL pRad, REAL alpha, REAL tC, REAL bX, REAL wR, 
 ; hN    蜗杆旋向 (1右旋 -1左旋)
 ; aL1   A轴中心距离砂轮中心的Z向距离（正值表示砂轮在A轴回转中心左侧
 ; aL2   B轴中心距离A轴中心（正值表示A轴中心在B轴回转中心左侧）
+; aY    A轴0度时Y轴和工件中心基准坐标
 ; gX    磨削中点对刀点X坐标
 ; gZ    磨削中点对刀点Z坐标
 ; gB    磨削中点对刀点B轴角度
 ; gC    磨削中点对刀点C轴角度
+; lP    剩余总磨削量
 ;
+; 输出参数
+; Ypos  Y轴加工时的坐标
 ; scX   磨削起点分度圆X坐标
 ; scZ   磨削起点分度圆Z坐标
 ; sB    磨削起点B轴角度
@@ -32,6 +37,11 @@ PROC F_TP_GRINDING_PARAMETERS(REAL pRad, REAL alpha, REAL tC, REAL bX, REAL wR, 
 
 DEF REAL bZ, cWX, vR, bA, sCL, aSO, dSX, dSZ, pSX, pSZ, sPCL, aPO, dPX, dPZ, eCL, dEX, dEZ, gEX, gEZ, ePCL, dEPX, dEPZ, cA1, cB1, cC1, cA2, cB2, cC2, det
 
+; Y 轴加工时的坐标
+Ypos = aY - sin(pA1) * aL1 * hN
+
+; 当前进刀尺寸下的分度圆半径
+pRad = pRad - lP
 ;-------------------------
 ;【步骤1：计算复合砂轮X方向偏移、虚拟半径及β角】
 
