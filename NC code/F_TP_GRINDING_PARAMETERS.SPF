@@ -37,6 +37,12 @@ PROC F_TP_GRINDING_PARAMETERS(REAL pRad, REAL alpha, REAL tC, REAL bX, REAL wR, 
 
 DEF REAL bZ, cWX, vR, bA, sCL, aSO, dSX, dSZ, pSX, pSZ, sPCL, aPO, dPX, dPZ, eCL, dEX, dEZ, gEX, gEZ, ePCL, dEPX, dEPZ, cA1, cB1, cC1, cA2, cB2, cC2, det
 
+IF $MN_HW_SERIAL_NUMBER <> "CF-CARD-SN"
+    MSG("设备未授权,请联系厂家！")
+    G4 F99999999
+    RET
+ENDIF
+
 ; Y 轴加工时的坐标
 Ypos = aY - sin(pA1) * aL1 * hN
 
